@@ -29,7 +29,7 @@ class _ScannerScreenState extends State<ScannerScreen>
     );
     _shutterAnimation = Tween<double>(
       begin: 0.0,
-      end: 0.6, // Shutter flash doesn't need to be pure 1.0 to feel real
+      end: 0.6,
     ).animate(_shutterController);
 
     controller.onCaptureStarted = () {
@@ -46,10 +46,9 @@ class _ScannerScreenState extends State<ScannerScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black, // Camera views should always be black
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // 1. Camera Engine
           CameraAwesomeBuilder.custom(
             saveConfig: SaveConfig.photo(),
             sensorConfig: SensorConfig.single(
@@ -58,15 +57,10 @@ class _ScannerScreenState extends State<ScannerScreen>
             builder: (cameraState, preview) {
               return Stack(
                 children: [
-                  // 2. Scanner Overlay (The frame and scanning line)
                   const IgnorePointer(child: ScannerOverlay()),
-
-                  // 3. UI Controls Overlay
                   cameraState.when(
                     onPhotoMode: (state) {
-                      // Sync controller state
                       controller.updateCameraState(state);
-
                       return Positioned(
                         bottom: 140,
                         left: 45,
@@ -101,10 +95,7 @@ class _ScannerScreenState extends State<ScannerScreen>
                       );
                     },
                     onPreparingCamera: (state) => Center(
-                      child: SpinKitRipple(
-                        color: AppColors.primary, // Using your theme's Indigo
-                        size: 100,
-                      ),
+                      child: SpinKitRipple(color: AppColors.primary, size: 100),
                     ),
                   ),
                 ],
@@ -112,7 +103,6 @@ class _ScannerScreenState extends State<ScannerScreen>
             },
           ),
 
-          // 4. Shutter Flash Effect
           IgnorePointer(
             child: FadeTransition(
               opacity: _shutterAnimation,

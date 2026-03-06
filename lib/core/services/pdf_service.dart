@@ -24,8 +24,6 @@ class PdfService {
               style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey),
             ),
             pw.Divider(height: 20, thickness: 0.5),
-
-            // Raw Text Body
             pw.Paragraph(
               text: scan.rawText,
               style: const pw.TextStyle(fontSize: 12, lineSpacing: 2),
@@ -35,7 +33,6 @@ class PdfService {
       ),
     );
 
-    // Opens the native print/share preview
     await Printing.sharePdf(
       bytes: await pdf.save(),
       filename: 'SwiftScan_${scan.title.replaceAll(' ', '_')}.pdf',
