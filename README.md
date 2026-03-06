@@ -1,7 +1,7 @@
-# 📱 SwiftScan – Private Offline Image Scanner
+# <img src="readme/appicon.png" width="40" height="40" valign="middle"> SwiftScan
 
 **SwiftScan** is a high-performance, **100% offline** image scanning and text extraction application
-built with **Flutter**. It provides fast OCR (Optical Character Recognition) and real-time
+built with **Flutter**. It provides blazing-fast OCR (Optical Character Recognition) and real-time
 translations directly from images without requiring an internet connection, ensuring your data
 remains private and secure on your device.
 
@@ -9,13 +9,17 @@ remains private and secure on your device.
 
 ## 📸 App Screenshots
 
-| App Icon | Scanner Preview | Scan History |
+| Scanner Preview | Scanning Process | Scan Preview |
 | :---: | :---: | :---: |
-| <img src="readme/appicon.png" width="160"> | <img src="readme/scanner.png" width="160"> | <img src="readme/scanhistory.png" width="160"> |
+| <img src="readme/scanner.png" width="180"> | <img src="readme/scanning.png" width="180"> | <img src="readme/scanpreview.png" width="180"> |
+
+| Scan Details | Translation | Scan History |
+| :---: | :---: | :---: |
+| <img src="readme/scandetails.png" width="180"> | <img src="readme/translation.png" width="180"> | <img src="readme/scanhistory.png" width="180"> |
 
 | Gallery Import | App Settings |
 | :---: | :---: |
-| <img src="readme/gallery.png" width="160"> | <img src="readme/settings.png" width="160"> |
+| <img src="readme/gallery.png" width="180"> | <img src="readme/settings.png" width="180"> |
 
 ---
 
