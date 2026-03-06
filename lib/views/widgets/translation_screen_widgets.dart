@@ -13,29 +13,37 @@ class TranslationAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final headerColor = isDark
+        ? AppColors.darkTextHeader
+        : AppColors.textHeader;
 
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       elevation: 0,
       surfaceTintColor: Colors.transparent,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
-        child: Divider(height: 1, color: Colors.black.withValues(alpha: 0.06)),
+        child: Divider(
+          height: 1,
+          color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.06),
+        ),
       ),
       leading: IconButton(
-        icon: const Icon(
+        icon: Icon(
           Icons.arrow_back_ios_new_rounded,
-          color: AppColors.textHeader,
+          color: headerColor,
           size: 20,
         ),
         onPressed: Get.back,
       ),
       title: Text(
         'Translate',
-        style: textTheme.titleMedium?.copyWith(
+        style: theme.textTheme.titleMedium?.copyWith(
           fontSize: 17,
           fontWeight: FontWeight.w600,
+          color: headerColor,
         ),
       ),
       centerTitle: true,
@@ -108,22 +116,26 @@ class LanguageDropdown extends GetView<TranslationController> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final textTheme = theme.textTheme;
 
     return GestureDetector(
       onTap: () => _showPicker(context),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDark ? theme.cardColor : Colors.white,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: Colors.black.withValues(alpha: 0.07),
+            color: (isDark ? Colors.white : Colors.black).withValues(
+              alpha: 0.07,
+            ),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
+              color: Colors.black.withValues(alpha: isDark ? 0.15 : 0.03),
               blurRadius: 8,
               offset: const Offset(0, 3),
             ),
@@ -136,7 +148,8 @@ class LanguageDropdown extends GetView<TranslationController> {
               label,
               style: textTheme.labelSmall?.copyWith(
                 fontSize: 10,
-                color: AppColors.textBody.withValues(alpha: 0.6),
+                color: (isDark ? AppColors.darkTextBody : AppColors.textBody)
+                    .withValues(alpha: 0.6),
                 letterSpacing: 0.5,
               ),
             ),
@@ -151,13 +164,17 @@ class LanguageDropdown extends GetView<TranslationController> {
                     style: textTheme.titleSmall?.copyWith(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
+                      color: isDark
+                          ? AppColors.darkTextHeader
+                          : AppColors.textHeader,
                     ),
                   ),
                 ),
                 Icon(
                   Icons.keyboard_arrow_down_rounded,
                   size: 18,
-                  color: AppColors.textBody.withValues(alpha: 0.4),
+                  color: (isDark ? AppColors.darkTextBody : AppColors.textBody)
+                      .withValues(alpha: 0.4),
                 ),
               ],
             ),
@@ -213,14 +230,16 @@ class _LanguagePickerSheetState extends State<LanguagePickerSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final bottom = MediaQuery.of(context).padding.bottom;
-    final textTheme = Theme.of(context).textTheme;
+    final textTheme = theme.textTheme;
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: isDark ? theme.cardColor : Colors.white,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
         children: [
@@ -230,7 +249,9 @@ class _LanguagePickerSheetState extends State<LanguagePickerSheet> {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.1),
+                color: (isDark ? Colors.white : Colors.black).withValues(
+                  alpha: 0.1,
+                ),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -242,6 +263,7 @@ class _LanguagePickerSheetState extends State<LanguagePickerSheet> {
               widget.title,
               style: textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
+                color: isDark ? AppColors.darkTextHeader : AppColors.textHeader,
               ),
             ),
           ),
@@ -250,24 +272,39 @@ class _LanguagePickerSheetState extends State<LanguagePickerSheet> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Container(
               decoration: BoxDecoration(
-                color: AppColors.background,
+                color: isDark
+                    ? theme.scaffoldBackgroundColor
+                    : AppColors.background,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.black.withValues(alpha: 0.06)),
+                border: Border.all(
+                  color: (isDark ? Colors.white : Colors.black).withValues(
+                    alpha: 0.06,
+                  ),
+                ),
               ),
               child: TextField(
                 autofocus: true,
                 onChanged: (v) => setState(() => _query = v),
-                style: textTheme.bodyMedium?.copyWith(fontSize: 13),
+                style: textTheme.bodyMedium?.copyWith(
+                  fontSize: 13,
+                  color: isDark
+                      ? AppColors.darkTextHeader
+                      : AppColors.textHeader,
+                ),
                 decoration: InputDecoration(
                   hintText: 'Search language…',
                   hintStyle: textTheme.bodyMedium?.copyWith(
                     fontSize: 13,
-                    color: AppColors.textBody.withValues(alpha: 0.4),
+                    color:
+                        (isDark ? AppColors.darkTextBody : AppColors.textBody)
+                            .withValues(alpha: 0.4),
                   ),
                   prefixIcon: Icon(
                     Icons.search_rounded,
                     size: 18,
-                    color: AppColors.textBody.withValues(alpha: 0.4),
+                    color:
+                        (isDark ? AppColors.darkTextBody : AppColors.textBody)
+                            .withValues(alpha: 0.4),
                   ),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(vertical: 12),
@@ -294,7 +331,9 @@ class _LanguagePickerSheetState extends State<LanguagePickerSheet> {
                           : FontWeight.w400,
                       color: isSelected
                           ? AppColors.primary
-                          : AppColors.textHeader,
+                          : (isDark
+                                ? AppColors.darkTextHeader
+                                : AppColors.textHeader),
                     ),
                   ),
                   trailing: isSelected
@@ -320,7 +359,9 @@ class ModelStatusBanner extends GetView<TranslationController> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final textTheme = theme.textTheme;
 
     return Obx(() {
       final status = controller.modelStatus.value;
@@ -337,7 +378,7 @@ class ModelStatusBanner extends GetView<TranslationController> {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.07),
+          color: color.withValues(alpha: isDark ? 0.15 : 0.07),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: color.withValues(alpha: 0.2)),
         ),
@@ -424,16 +465,20 @@ class _InputCardState extends State<InputCard> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final textTheme = theme.textTheme;
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? theme.cardColor : Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+        border: Border.all(
+          color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
+            color: Colors.black.withValues(alpha: isDark ? 0.1 : 0.02),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -475,7 +520,11 @@ class _InputCardState extends State<InputCard> {
                       icon: Icon(
                         Icons.close_rounded,
                         size: 18,
-                        color: AppColors.textBody.withValues(alpha: 0.4),
+                        color:
+                            (isDark
+                                    ? AppColors.darkTextBody
+                                    : AppColors.textBody)
+                                .withValues(alpha: 0.4),
                       ),
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
@@ -491,12 +540,17 @@ class _InputCardState extends State<InputCard> {
               onChanged: (v) => controller.inputText.value = v,
               maxLines: 6,
               minLines: 4,
-              style: textTheme.bodyMedium?.copyWith(fontSize: 14, height: 1.6),
+              style: textTheme.bodyMedium?.copyWith(
+                fontSize: 14,
+                height: 1.6,
+                color: isDark ? AppColors.darkTextHeader : AppColors.textHeader,
+              ),
               decoration: InputDecoration(
                 hintText: 'Enter text to translate…',
                 hintStyle: textTheme.bodyMedium?.copyWith(
                   fontSize: 14,
-                  color: AppColors.textBody.withValues(alpha: 0.35),
+                  color: (isDark ? AppColors.darkTextBody : AppColors.textBody)
+                      .withValues(alpha: 0.35),
                 ),
                 border: InputBorder.none,
               ),
@@ -509,7 +563,8 @@ class _InputCardState extends State<InputCard> {
                 '${controller.inputText.value.length} characters',
                 style: textTheme.bodySmall?.copyWith(
                   fontSize: 11,
-                  color: AppColors.textBody.withValues(alpha: 0.4),
+                  color: (isDark ? AppColors.darkTextBody : AppColors.textBody)
+                      .withValues(alpha: 0.4),
                 ),
               ),
             ),
@@ -537,6 +592,7 @@ class TranslateButton extends GetView<TranslationController> {
               : controller.translate,
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
             disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
@@ -571,7 +627,9 @@ class OutputCard extends GetView<TranslationController> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final textTheme = theme.textTheme;
 
     return Obx(() {
       final text = controller.translatedText.value;
@@ -583,10 +641,12 @@ class OutputCard extends GetView<TranslationController> {
             ? const SizedBox.shrink()
             : Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: isDark ? theme.cardColor : Colors.white,
                   borderRadius: BorderRadius.circular(18),
                   border: Border.all(
-                    color: AppColors.primary.withValues(alpha: 0.15),
+                    color: AppColors.primary.withValues(
+                      alpha: isDark ? 0.3 : 0.15,
+                    ),
                     width: 1,
                   ),
                   boxShadow: [
@@ -651,9 +711,15 @@ class OutputCard extends GetView<TranslationController> {
                                   'Translation copied',
                                   style: textTheme.bodySmall?.copyWith(
                                     fontSize: 13,
+                                    color: isDark
+                                        ? AppColors.darkTextHeader
+                                        : AppColors.textHeader,
                                   ),
                                 ),
                                 snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: isDark
+                                    ? theme.cardColor
+                                    : Colors.white,
                                 margin: const EdgeInsets.all(16),
                                 duration: const Duration(seconds: 2),
                               );
@@ -669,6 +735,9 @@ class OutputCard extends GetView<TranslationController> {
                         style: textTheme.bodyMedium?.copyWith(
                           fontSize: 15,
                           height: 1.65,
+                          color: isDark
+                              ? AppColors.darkTextHeader
+                              : AppColors.textHeader,
                         ),
                       ),
                     ),
@@ -694,12 +763,15 @@ class IconAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return IconButton(
       onPressed: onTap,
       icon: Icon(
         icon,
         size: 18,
-        color: AppColors.textBody.withValues(alpha: 0.5),
+        color: (isDark ? AppColors.darkTextBody : AppColors.textBody)
+            .withValues(alpha: 0.5),
       ),
       tooltip: tooltip,
       padding: const EdgeInsets.all(8),

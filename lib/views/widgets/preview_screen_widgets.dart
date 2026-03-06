@@ -25,12 +25,17 @@ class AppBarIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return IconButton(
       icon: Icon(
         icon,
         color: enabled
-            ? AppColors.textHeader
-            : AppColors.textBody.withValues(alpha: 0.3),
+            ? (isDark ? AppColors.darkTextHeader : AppColors.textHeader)
+            : (isDark ? AppColors.darkTextBody : AppColors.textBody).withValues(
+                alpha: 0.3,
+              ),
         size: 22,
       ),
       onPressed: enabled ? onTap : null,
@@ -79,9 +84,7 @@ class PreviewView extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           const Positioned.fill(child: DotGridBackground()),
-
           if (displayBytes != null) ImagePreviewCard(bytes: displayBytes),
-
           Positioned(
             top: 16,
             child: controller.croppedBytes.value != null
@@ -116,9 +119,15 @@ class CropView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    // Dynamic background for crop area
+    final bgColor = theme.brightness == Brightness.dark
+        ? const Color(0xFF0F172A)
+        : const Color(0xFFF1F3F9);
+
     return Stack(
       children: [
-        Container(color: const Color(0xFFF1F3F9)),
+        Container(color: bgColor),
         Crop(
           image: bytes,
           controller: cropController,
@@ -132,7 +141,7 @@ class CropView extends StatelessWidget {
           },
           onStatusChanged: controller.onCropStatusChanged,
           onHistoryChanged: controller.onHistoryChanged,
-          baseColor: const Color(0xFFF1F3F9),
+          baseColor: bgColor,
           maskColor: Colors.black.withValues(alpha: 0.45),
           cornerDotBuilder: (size, _) => CropCornerDot(size: size),
           interactive: true,
@@ -140,12 +149,10 @@ class CropView extends StatelessWidget {
             child: CircularProgressIndicator(color: AppColors.primary),
           ),
         ),
-
-        // Veil while the crop widget initialises
         Obx(
           () => !controller.isCropReady.value
               ? Container(
-                  color: const Color(0xFFF1F3F9),
+                  color: bgColor,
                   child: const Center(
                     child: CircularProgressIndicator(color: AppColors.primary),
                   ),
@@ -184,14 +191,18 @@ class ActionBarContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         border: Border(
           top: BorderSide(
-            color: Colors.black.withValues(alpha: 0.06),
+            color: (isDark ? Colors.white : Colors.black).withValues(
+              alpha: 0.06,
+            ),
             width: 1,
           ),
         ),
@@ -239,6 +250,7 @@ class ScanButton extends StatelessWidget {
               : controller.finalizeAndProcess,
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
             disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
@@ -286,6 +298,8 @@ class ImagePreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: padding,
       child: Container(
@@ -298,7 +312,7 @@ class ImagePreviewCard extends StatelessWidget {
               offset: const Offset(0, 12),
             ),
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.08),
               blurRadius: 16,
               offset: const Offset(0, 4),
             ),
@@ -363,11 +377,16 @@ class _OcrProcessingOverlayState extends State<OcrProcessingOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final textTheme = theme.textTheme;
 
     return RepaintBoundary(
       child: Container(
-        color: Colors.white.withValues(alpha: 0.88),
+        // Dynamic full-screen blur color
+        color: (isDark ? const Color(0xFF0F172A) : Colors.white).withValues(
+          alpha: 0.88,
+        ),
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -376,10 +395,12 @@ class _OcrProcessingOverlayState extends State<OcrProcessingOverlay> {
                 top: 48,
                 right: 24,
                 child: IconButton(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.close,
                     size: 32,
-                    color: AppColors.textHeader,
+                    color: isDark
+                        ? AppColors.darkTextHeader
+                        : AppColors.textHeader,
                   ),
                   onPressed: widget.onCancel,
                 ),
@@ -390,7 +411,7 @@ class _OcrProcessingOverlayState extends State<OcrProcessingOverlay> {
                   horizontal: 36,
                   vertical: 32,
                 ),
-                decoration: GlassStyles.pearlGlass,
+                decoration: GlassStyles.pearlGlass(context),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -400,6 +421,9 @@ class _OcrProcessingOverlayState extends State<OcrProcessingOverlay> {
                       'Reading Text...',
                       style: textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
+                        color: isDark
+                            ? AppColors.darkTextHeader
+                            : AppColors.textHeader,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -420,7 +444,9 @@ class _OcrProcessingOverlayState extends State<OcrProcessingOverlay> {
                         key: ValueKey(_index),
                         textAlign: TextAlign.center,
                         style: textTheme.bodySmall?.copyWith(
-                          color: AppColors.textBody,
+                          color: isDark
+                              ? AppColors.darkTextBody
+                              : AppColors.textBody,
                         ),
                       ),
                     ),

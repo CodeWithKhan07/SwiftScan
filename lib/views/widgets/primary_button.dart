@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import '../../core/resources/theme/app_theme.dart';
 
 class CustomButton extends StatelessWidget {
   final String label;
@@ -18,25 +21,46 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    // Define colors based on state and theme
+    final Color primaryBg = AppColors.primary;
+    final Color secondaryBg = isDark
+        ? theme.cardColor
+        : Colors.black.withValues(alpha: 0.05);
+
+    // Content color (Text, Icon, and Loader)
+    final Color contentColor = isPrimary
+        ? Colors.white
+        : (isDark ? AppColors.darkTextHeader : AppColors.textHeader);
+
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: isPrimary ? const Color(0xFF6366F1) : Colors.white10,
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(vertical: 18),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        backgroundColor: isPrimary ? primaryBg : secondaryBg,
+        foregroundColor: contentColor,
         elevation: 0,
+        padding: const EdgeInsets.symmetric(vertical: 18),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: !isPrimary && isDark
+              ? BorderSide(color: Colors.white.withValues(alpha: 0.1))
+              : BorderSide.none,
+        ),
         disabledBackgroundColor: isPrimary
-            ? const Color(0xFF6366F1).withValues(alpha: 0.5)
-            : Colors.white10.withValues(alpha: 0.05),
+            ? primaryBg.withValues(alpha: 0.5)
+            : secondaryBg.withValues(alpha: 0.3),
       ),
       child: isLoading
-          ? const SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.white,
+          ? Center(
+              child: SizedBox(
+                height: 40, // Increased box size for the ripple effect
+                width: 40,
+                child: SpinKitRipple(
+                  color: contentColor, // Dynamic color based on button style
+                  size: 35.0,
+                ),
               ),
             )
           : Row(
@@ -46,11 +70,17 @@ class CustomButton extends StatelessWidget {
                   Icon(
                     icon,
                     size: 20,
-                    color: isPrimary ? Colors.white : Colors.white70,
+                    color: contentColor.withValues(alpha: 0.9),
                   ),
                   const SizedBox(width: 8),
                 ],
-                Text(label, style: Theme.of(context).textTheme.titleMedium),
+                Text(
+                  label,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: contentColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ],
             ),
     );

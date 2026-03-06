@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/resources/theme/app_theme.dart';
@@ -18,13 +19,17 @@ class ScanDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final headerColor = isDark
+        ? AppColors.darkTextHeader
+        : AppColors.textHeader;
 
     return CustomAppBar(
       leading: IconButton(
-        icon: const Icon(
+        icon: Icon(
           Icons.arrow_back_ios_new_rounded,
-          color: AppColors.textHeader,
+          color: headerColor,
           size: 20,
         ),
         onPressed: () => Get.back(),
@@ -33,13 +38,17 @@ class ScanDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Text(
             controller.scan.title,
-            style: textTheme.titleMedium?.copyWith(fontSize: 15),
+            style: GoogleFonts.poppins(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: headerColor,
+            ),
           ),
           Text(
             DateFormat('MMM d, yyyy · h:mm a').format(controller.scan.dateTime),
-            style: textTheme.bodySmall?.copyWith(
+            style: GoogleFonts.poppins(
               fontSize: 11,
-              color: AppColors.textBody,
+              color: isDark ? AppColors.darkTextBody : AppColors.textBody,
             ),
           ),
         ],
@@ -79,15 +88,22 @@ class ViewToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Obx(() {
       final showImage = controller.showImage.value;
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDark ? theme.cardColor : Colors.white,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.black.withValues(alpha: 0.06)),
+          border: Border.all(
+            color: (isDark ? Colors.white : Colors.black).withValues(
+              alpha: 0.06,
+            ),
+          ),
         ),
         child: Row(
           children: [
@@ -126,7 +142,11 @@ class ToggleTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final unselectedColor = isDark
+        ? AppColors.darkTextBody
+        : AppColors.textBody;
 
     return Expanded(
       child: GestureDetector(
@@ -144,15 +164,15 @@ class ToggleTab extends StatelessWidget {
               Icon(
                 icon,
                 size: 16,
-                color: active ? Colors.white : AppColors.textBody,
+                color: active ? Colors.white : unselectedColor,
               ),
               const SizedBox(width: 6),
               Text(
                 label,
-                style: textTheme.labelMedium?.copyWith(
+                style: GoogleFonts.poppins(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: active ? Colors.white : AppColors.textBody,
+                  color: active ? Colors.white : unselectedColor,
                 ),
               ),
             ],
@@ -170,6 +190,8 @@ class ImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       children: [
         ViewToggle(controller: controller),
@@ -190,7 +212,9 @@ class ImageView extends StatelessWidget {
                               offset: const Offset(0, 12),
                             ),
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.06),
+                              color: Colors.black.withValues(
+                                alpha: isDark ? 0.2 : 0.06,
+                              ),
                               blurRadius: 16,
                               offset: const Offset(0, 4),
                             ),
@@ -228,8 +252,9 @@ class TextView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final text = controller.scan.rawText;
-    final textTheme = Theme.of(context).textTheme;
 
     return Column(
       children: [
@@ -247,10 +272,12 @@ class TextView extends StatelessWidget {
                   width: double.infinity,
                   margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: theme.cardColor,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: Colors.black.withValues(alpha: 0.08),
+                      color: (isDark ? Colors.white : Colors.black).withValues(
+                        alpha: 0.08,
+                      ),
                     ),
                     boxShadow: [
                       BoxShadow(
@@ -269,9 +296,13 @@ class TextView extends StatelessWidget {
                         physics: const BouncingScrollPhysics(),
                         child: SelectableText(
                           text,
-                          style: textTheme.bodyMedium?.copyWith(
+                          style: GoogleFonts.poppins(
                             fontSize: 15,
+                            color: isDark
+                                ? AppColors.darkTextHeader
+                                : AppColors.textHeader,
                             height: 1.6,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
@@ -325,21 +356,26 @@ class ActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final bottom = MediaQuery.of(context).padding.bottom;
-    final textTheme = Theme.of(context).textTheme;
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
             blurRadius: 10,
             offset: const Offset(0, -5),
           ),
         ],
         border: Border(
-          top: BorderSide(color: Colors.black.withValues(alpha: 0.06)),
+          top: BorderSide(
+            color: (isDark ? Colors.white : Colors.black).withValues(
+              alpha: 0.06,
+            ),
+          ),
         ),
       ),
       padding: EdgeInsets.fromLTRB(16, 12, 16, 12 + bottom),
@@ -357,21 +393,18 @@ class ActionBar extends StatelessWidget {
                       icon: Icons.copy_rounded,
                       label: 'COPY',
                       onTap: controller.copyText,
-                      height: 52,
                     ),
                     const SizedBox(width: 8),
                     IconLabelButton(
                       icon: Icons.g_translate_rounded,
                       label: 'TRANSLATE',
                       onTap: controller.translateText,
-                      height: 52,
                     ),
                     const SizedBox(width: 12),
                     IconLabelButton(
                       icon: Icons.share_outlined,
                       label: 'TEXT',
                       onTap: controller.shareText,
-                      height: 52,
                     ),
                     const SizedBox(width: 8),
                     if (controller.imageExists) ...[
@@ -379,15 +412,13 @@ class ActionBar extends StatelessWidget {
                         icon: Icons.image_outlined,
                         label: 'IMAGE',
                         onTap: controller.shareImage,
-                        height: 52,
                       ),
                       const SizedBox(width: 8),
                     ],
                     IconLabelButton(
                       icon: Icons.picture_as_pdf,
-                      label: 'Save As Pdf',
+                      label: 'PDF',
                       onTap: controller.exportToPdf,
-                      height: 52,
                     ),
                     const SizedBox(width: 12),
                   ],
@@ -401,6 +432,7 @@ class ActionBar extends StatelessWidget {
                 onPressed: () => Get.back(),
                 style: FilledButton.styleFrom(
                   backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
@@ -410,11 +442,10 @@ class ActionBar extends StatelessWidget {
                 icon: const Icon(Icons.document_scanner_outlined, size: 18),
                 label: Text(
                   'RE-SCAN',
-                  style: textTheme.labelLarge?.copyWith(
+                  style: GoogleFonts.poppins(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.5,
-                    color: Colors.white,
                   ),
                 ),
               ),

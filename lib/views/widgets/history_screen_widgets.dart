@@ -9,7 +9,7 @@ import '../../core/resources/theme/app_theme.dart';
 import '../../core/routes/app_routes.dart';
 import '../../data/models/scan_model.dart';
 import '../history/history_controller.dart';
-import 'common_widgets.dart';
+import '../widgets/common_widgets.dart';
 import 'delete_dialog.dart';
 
 class HistoryAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -20,13 +20,17 @@ class HistoryAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return CustomAppBar(
       automaticallyImplyLeading: false,
       title: Text(
         'Scan History',
-        style: textTheme.titleMedium?.copyWith(fontSize: 17),
+        style: theme.textTheme.titleMedium?.copyWith(
+          fontSize: 17,
+          color: isDark ? AppColors.darkTextHeader : AppColors.textHeader,
+        ),
       ),
     );
   }
@@ -37,25 +41,31 @@ class HistorySearch extends GetView<HistoryController> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final bodyColor = isDark ? AppColors.darkTextBody : AppColors.textBody;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
       child: AppCard(
         padding: EdgeInsets.zero,
+        // AppCard already uses theme.cardColor from our previous fix
         child: TextField(
           onTapOutside: (_) => FocusScope.of(context).unfocus(),
           onChanged: (v) => controller.searchQuery.value = v,
-          style: textTheme.bodyMedium?.copyWith(fontSize: 13),
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontSize: 13,
+            color: isDark ? AppColors.darkTextHeader : AppColors.textHeader,
+          ),
           decoration: InputDecoration(
             hintText: 'Search documents, dates...',
-            hintStyle: textTheme.bodyMedium?.copyWith(
+            hintStyle: theme.textTheme.bodyMedium?.copyWith(
               fontSize: 13,
-              color: AppColors.textBody.withValues(alpha: 0.5),
+              color: bodyColor.withValues(alpha: 0.5),
             ),
             prefixIcon: Icon(
               Icons.search_rounded,
-              color: AppColors.textBody.withValues(alpha: 0.4),
+              color: bodyColor.withValues(alpha: 0.4),
               size: 20,
             ),
             border: InputBorder.none,
@@ -75,7 +85,8 @@ class ScanGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final isPinnedGroup = label == 'PINNED';
 
     return Column(
@@ -95,9 +106,11 @@ class ScanGroup extends StatelessWidget {
               ],
               Text(
                 label,
-                style: textTheme.labelSmall?.copyWith(
+                style: theme.textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: isPinnedGroup ? AppColors.primary : AppColors.textBody,
+                  color: isPinnedGroup
+                      ? AppColors.primary
+                      : (isDark ? AppColors.darkTextBody : AppColors.textBody),
                   letterSpacing: 1.2,
                 ),
               ),
@@ -128,19 +141,25 @@ class ScanCard extends GetView<HistoryController> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final headerColor = isDark
+        ? AppColors.darkTextHeader
+        : AppColors.textHeader;
+    final bodyColor = isDark ? AppColors.darkTextBody : AppColors.textBody;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Slidable(
         key: Key(scan.id),
+        // Slide actions use alpha backgrounds to blend with dark mode
         startActionPane: ActionPane(
           motion: const DrawerMotion(),
           extentRatio: 0.22,
           children: [
             CustomSlidableAction(
               onPressed: (_) => controller.togglePin(scan),
-              backgroundColor: AppColors.primary.withValues(alpha: 0.08),
+              backgroundColor: AppColors.primary.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(18),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -155,7 +174,7 @@ class ScanCard extends GetView<HistoryController> {
                   const SizedBox(height: 4),
                   Text(
                     scan.isPinned ? 'Unpin' : 'Pin',
-                    style: textTheme.labelSmall?.copyWith(
+                    style: theme.textTheme.labelSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColors.primary,
                     ),
@@ -171,7 +190,7 @@ class ScanCard extends GetView<HistoryController> {
           children: [
             CustomSlidableAction(
               onPressed: _handleDelete,
-              backgroundColor: AppColors.error.withValues(alpha: 0.08),
+              backgroundColor: AppColors.error.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(18),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -184,7 +203,7 @@ class ScanCard extends GetView<HistoryController> {
                   const SizedBox(height: 4),
                   Text(
                     'Delete',
-                    style: textTheme.labelSmall?.copyWith(
+                    style: theme.textTheme.labelSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColors.error,
                     ),
@@ -221,18 +240,19 @@ class ScanCard extends GetView<HistoryController> {
                               scan.title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: textTheme.titleSmall?.copyWith(
+                              style: theme.textTheme.titleSmall?.copyWith(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
+                                color: headerColor,
                               ),
                             ),
                           ),
                           const SizedBox(width: 8),
                           Text(
                             DateFormat('h:mm a').format(scan.dateTime),
-                            style: textTheme.labelSmall?.copyWith(
+                            style: theme.textTheme.labelSmall?.copyWith(
                               fontSize: 11,
-                              color: AppColors.textBody.withValues(alpha: 0.6),
+                              color: bodyColor.withValues(alpha: 0.6),
                             ),
                           ),
                         ],
@@ -242,9 +262,9 @@ class ScanCard extends GetView<HistoryController> {
                         scan.rawText,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: textTheme.bodySmall?.copyWith(
+                        style: theme.textTheme.bodySmall?.copyWith(
                           fontSize: 12,
-                          color: AppColors.textBody,
+                          color: bodyColor,
                           height: 1.4,
                         ),
                       ),
@@ -254,7 +274,7 @@ class ScanCard extends GetView<HistoryController> {
                 const SizedBox(width: 4),
                 Icon(
                   Icons.chevron_right_rounded,
-                  color: AppColors.textBody.withValues(alpha: 0.3),
+                  color: bodyColor.withValues(alpha: 0.3),
                   size: 20,
                 ),
               ],
@@ -268,13 +288,11 @@ class ScanCard extends GetView<HistoryController> {
 
 class ScanThumbnail extends StatelessWidget {
   const ScanThumbnail({super.key, required this.imagePath});
-
   final String imagePath;
 
   @override
   Widget build(BuildContext context) {
     final file = File(imagePath);
-
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: SizedBox(
@@ -299,8 +317,12 @@ class ThumbnailFallback extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      color: const Color(0xFFEEF2FF),
+      // Background adjusts to dark mode
+      color: isDark
+          ? AppColors.primary.withValues(alpha: 0.1)
+          : const Color(0xFFEEF2FF),
       child: const Center(
         child: Icon(Icons.article_outlined, color: AppColors.primary, size: 26),
       ),
@@ -313,7 +335,12 @@ class EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final headerColor = isDark
+        ? AppColors.darkTextHeader
+        : AppColors.textHeader;
+    final bodyColor = isDark ? AppColors.darkTextBody : AppColors.textBody;
 
     return Center(
       child: Column(
@@ -322,7 +349,7 @@ class EmptyState extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.05),
+              color: AppColors.primary.withValues(alpha: 0.08),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -334,7 +361,10 @@ class EmptyState extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             'No documents found',
-            style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: headerColor,
+            ),
           ),
           const SizedBox(height: 8),
           Padding(
@@ -342,8 +372,8 @@ class EmptyState extends StatelessWidget {
             child: Text(
               'Your scanned documents will appear here for easy access.',
               textAlign: TextAlign.center,
-              style: textTheme.bodyMedium?.copyWith(
-                color: AppColors.textBody.withValues(alpha: 0.6),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: bodyColor.withValues(alpha: 0.6),
               ),
             ),
           ),

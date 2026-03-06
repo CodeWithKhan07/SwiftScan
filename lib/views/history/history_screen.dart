@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../core/resources/theme/app_theme.dart';
 import '../widgets/history_screen_widgets.dart';
 import 'history_controller.dart';
 
@@ -11,7 +10,6 @@ class HistoryScreen extends GetView<HistoryController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: const HistoryAppBar(),
       body: Column(
         children: [

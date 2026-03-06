@@ -2,9 +2,10 @@ import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:swiftscan/views/scanner/scan_controller.dart';
 
+import '../../core/resources/theme/app_theme.dart';
 import '../widgets/scanner_overlay.dart';
+import 'scan_controller.dart';
 
 class ScannerScreen extends StatefulWidget {
   const ScannerScreen({super.key});
@@ -28,8 +29,9 @@ class _ScannerScreenState extends State<ScannerScreen>
     );
     _shutterAnimation = Tween<double>(
       begin: 0.0,
-      end: 1.0,
+      end: 0.6, // Shutter flash doesn't need to be pure 1.0 to feel real
     ).animate(_shutterController);
+
     controller.onCaptureStarted = () {
       _shutterController.forward().then((_) => _shutterController.reverse());
     };
@@ -44,60 +46,73 @@ class _ScannerScreenState extends State<ScannerScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.black, // Camera views should always be black
       body: Stack(
         children: [
+          // 1. Camera Engine
           CameraAwesomeBuilder.custom(
             saveConfig: SaveConfig.photo(),
             sensorConfig: SensorConfig.single(
               aspectRatio: CameraAspectRatios.ratio_16_9,
             ),
             builder: (cameraState, preview) {
-              cameraState.when(
-                onPhotoMode: (state) => controller.updateCameraState(state),
-              );
               return Stack(
                 children: [
+                  // 2. Scanner Overlay (The frame and scanning line)
                   const IgnorePointer(child: ScannerOverlay()),
-                  cameraState.when(
-                    onPhotoMode: (state) => Positioned(
-                      bottom: 140,
-                      left: 45,
-                      right: 45,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _buildSmallBtn(
-                            icon: Icons.photo_library_rounded,
-                            onTap: () => controller.pickFromGallery(context),
-                          ),
 
-                          StreamBuilder<FlashMode>(
-                            stream: state.sensorConfig.flashMode$,
-                            builder: (context, snapshot) {
-                              final flash = snapshot.data ?? FlashMode.none;
-                              return _buildSmallBtn(
-                                icon: flash == FlashMode.none
-                                    ? Icons.flash_off_rounded
-                                    : Icons.flash_on_rounded,
-                                onTap: () => state.sensorConfig.setFlashMode(
-                                  flash == FlashMode.none
-                                      ? FlashMode.always
-                                      : FlashMode.none,
-                                ),
-                              );
-                            },
-                          ),
-                        ],
+                  // 3. UI Controls Overlay
+                  cameraState.when(
+                    onPhotoMode: (state) {
+                      // Sync controller state
+                      controller.updateCameraState(state);
+
+                      return Positioned(
+                        bottom: 140,
+                        left: 45,
+                        right: 45,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _buildSmallBtn(
+                              icon: Icons.photo_library_rounded,
+                              onTap: () => controller.pickFromGallery(context),
+                            ),
+
+                            StreamBuilder<FlashMode>(
+                              stream: state.sensorConfig.flashMode$,
+                              builder: (context, snapshot) {
+                                final flash = snapshot.data ?? FlashMode.none;
+                                return _buildSmallBtn(
+                                  icon: flash == FlashMode.none
+                                      ? Icons.flash_off_rounded
+                                      : Icons.flash_on_rounded,
+                                  isActive: flash != FlashMode.none,
+                                  onTap: () => state.sensorConfig.setFlashMode(
+                                    flash == FlashMode.none
+                                        ? FlashMode.always
+                                        : FlashMode.none,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    onPreparingCamera: (state) => Center(
+                      child: SpinKitRipple(
+                        color: AppColors.primary, // Using your theme's Indigo
+                        size: 100,
                       ),
                     ),
-                    onPreparingCamera: (state) =>
-                        const Center(child: SpinKitRipple(color: Colors.blue)),
                   ),
                 ],
               );
             },
           ),
+
+          // 4. Shutter Flash Effect
           IgnorePointer(
             child: FadeTransition(
               opacity: _shutterAnimation,
@@ -109,20 +124,38 @@ class _ScannerScreenState extends State<ScannerScreen>
     );
   }
 
-  Widget _buildSmallBtn({required IconData icon, required VoidCallback onTap}) {
+  Widget _buildSmallBtn({
+    required IconData icon,
+    required VoidCallback onTap,
+    bool isActive = false,
+  }) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(30),
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.4),
+            color: isActive
+                ? AppColors.primary.withValues(alpha: 0.9)
+                : Colors.black.withValues(alpha: 0.45),
             shape: BoxShape.circle,
-            border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.25),
+              width: 1.5,
+            ),
+            boxShadow: isActive
+                ? [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.3),
+                      blurRadius: 12,
+                      spreadRadius: 2,
+                    ),
+                  ]
+                : [],
           ),
-          child: Icon(icon, color: Colors.white, size: 26),
+          child: Icon(icon, color: Colors.white, size: 24),
         ),
       ),
     );

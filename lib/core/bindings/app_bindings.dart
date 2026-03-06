@@ -17,12 +17,33 @@ import '../services/app_lock_service.dart';
 import '../services/file_storage_service.dart';
 import '../services/image_processing_service.dart';
 
-class SplashBinding extends Bindings {
+class InitialBinding extends Bindings {
   @override
   void dependencies() {
+    final hiveRepo = Get.put(HiveRepository(), permanent: true);
+    Get.put(ScanRepository(hiveRepo), permanent: true);
+    Get.lazyPut(() => OcrLanguageRepository(), fenix: true);
+    Get.lazyPut(() => TranslationRepository(), fenix: true);
+    Get.lazyPut(() => OcrService(), fenix: true);
+
     if (!Get.isRegistered<AppLockService>()) {
       Get.put(AppLockService(), permanent: true);
     }
+    Get.put(
+      SettingsController(
+        Get.find<OcrLanguageRepository>(),
+        Get.find<AppLockService>(),
+        Get.find<TranslationRepository>(),
+        Get.find<ScanRepository>(),
+      ),
+      permanent: true,
+    );
+  }
+}
+
+class SplashBinding extends Bindings {
+  @override
+  void dependencies() {
     Get.put(SplashController());
   }
 }
@@ -30,23 +51,7 @@ class SplashBinding extends Bindings {
 class HomeBindings extends Bindings {
   @override
   void dependencies() {
-    Get.put(HiveRepository(), permanent: true);
-    Get.lazyPut(() => OcrLanguageRepository(), fenix: true);
-    Get.put(ScanRepository(Get.find<HiveRepository>()), permanent: true);
-    Get.lazyPut(() => TranslationRepository(), fenix: true);
-    Get.lazyPut(() => OcrService(), fenix: true);
-    if (!Get.isRegistered<AppLockService>()) {
-      Get.put(AppLockService(), permanent: true);
-    }
-    Get.lazyPut(
-      () => SettingsController(
-        Get.find<OcrLanguageRepository>(),
-        Get.find<AppLockService>(),
-        Get.find<TranslationRepository>(),
-        Get.find<ScanRepository>(),
-      ),
-      fenix: true,
-    );
+    // Only View Controllers go here
     Get.lazyPut(() => MainController());
     Get.lazyPut(() => ScannerController());
     Get.lazyPut(() => HistoryController(Get.find<ScanRepository>()));
@@ -56,13 +61,13 @@ class HomeBindings extends Bindings {
 class PreviewBindings extends Bindings {
   @override
   void dependencies() => Get.lazyPut(
-        () => PreviewController(
-          Get.find<OcrService>(),
-          Get.find<ScanRepository>(),
-          FileStorageService(),
-          ImageProcessingService(),
-        ),
-      );
+    () => PreviewController(
+      Get.find<OcrService>(),
+      Get.find<ScanRepository>(),
+      FileStorageService(),
+      ImageProcessingService(),
+    ),
+  );
 }
 
 class ScanDetailBinding extends Bindings {

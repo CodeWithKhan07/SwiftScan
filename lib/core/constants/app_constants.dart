@@ -7,4 +7,21 @@ class AppConstants {
   static const int minImageHeight = 1080;
   static const int imageQuality = 85;
   static const String scanOutputFolder = 'scans';
+  static List<({String code, String label})> kTranslationLanguages = [
+    (code: 'af', label: 'Afrikaans'),
+    (code: 'ar', label: 'Arabic'),
+    (code: 'zh', label: 'Chinese'),
+    (code: 'fr', label: 'French'),
+    (code: 'de', label: 'German'),
+    (code: 'hi', label: 'Hindi'),
+    (code: 'id', label: 'Indonesian'),
+    (code: 'it', label: 'Italian'),
+    (code: 'ja', label: 'Japanese'),
+    (code: 'ko', label: 'Korean'),
+    (code: 'pt', label: 'Portuguese'),
+    (code: 'ru', label: 'Russian'),
+    (code: 'es', label: 'Spanish'),
+    (code: 'tr', label: 'Turkish'),
+    (code: 'uk', label: 'Ukrainian'),
+  ];
 }

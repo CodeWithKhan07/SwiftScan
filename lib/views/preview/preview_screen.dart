@@ -15,8 +15,10 @@ class PreviewScreen extends GetView<PreviewController> {
   @override
   Widget build(BuildContext context) {
     final cropController = CropController();
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: _PreviewAppBar(
         controller: controller,
         cropController: cropController,
@@ -80,13 +82,23 @@ class _PreviewAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final headerColor = isDark
+        ? AppColors.darkTextHeader
+        : AppColors.textHeader;
+
     return AppBar(
-      backgroundColor: Colors.white,
+      // Background adapts to theme
+      backgroundColor: theme.scaffoldBackgroundColor,
       elevation: 0,
       surfaceTintColor: Colors.transparent,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
-        child: Divider(height: 1, color: Colors.black.withValues(alpha: 0.06)),
+        child: Divider(
+          height: 1,
+          color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.06),
+        ),
       ),
       leading: Obx(
         () => IconButton(
@@ -94,7 +106,7 @@ class _PreviewAppBar extends StatelessWidget implements PreferredSizeWidget {
             controller.isCropping.value
                 ? Icons.close_rounded
                 : Icons.arrow_back_ios_new_rounded,
-            color: AppColors.textHeader,
+            color: headerColor,
             size: 20,
           ),
           onPressed: controller.isCropping.value
@@ -111,7 +123,7 @@ class _PreviewAppBar extends StatelessWidget implements PreferredSizeWidget {
             style: GoogleFonts.poppins(
               fontSize: 17,
               fontWeight: FontWeight.w600,
-              color: AppColors.textHeader,
+              color: headerColor,
             ),
           ),
         ),
@@ -164,6 +176,7 @@ class _CropAppBarActions extends StatelessWidget {
             onPressed: cropController.crop,
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 18),
               minimumSize: const Size(0, 34),
               shape: RoundedRectangleBorder(

@@ -10,11 +10,11 @@ class SettingsScreen extends GetView<SettingsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
       appBar: const SettingsAppBar(),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: const [
+          AppearanceGroup(),
           OcrLanguagesGroup(),
           TranslationGroup(),
           PrivacyGroup(),

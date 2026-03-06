@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../core/resources/theme/app_theme.dart';
 import '../settings/settings_controller.dart';
+import '../translation/translation_controller.dart';
 import 'common_widgets.dart';
 
 class SettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -13,13 +14,17 @@ class SettingsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return CustomAppBar(
       automaticallyImplyLeading: false,
       title: Text(
         'Settings',
-        style: textTheme.titleMedium?.copyWith(fontSize: 17),
+        style: theme.textTheme.titleMedium?.copyWith(
+          fontSize: 17,
+          color: isDark ? AppColors.darkTextHeader : AppColors.textHeader,
+        ),
       ),
     );
   }
@@ -33,22 +38,25 @@ class Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: textTheme.labelSmall?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: AppColors.textBody,
-              letterSpacing: 1.2,
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: 10),
+            child: Text(
+              title,
+              style: theme.textTheme.labelSmall?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: isDark ? AppColors.darkTextBody : AppColors.textBody,
+                letterSpacing: 1.2,
+              ),
             ),
           ),
-          const SizedBox(height: 10),
           AppCard(
             padding: EdgeInsets.zero,
             child: Column(
@@ -59,7 +67,7 @@ class Section extends StatelessWidget {
                     Divider(
                       height: 1,
                       indent: 56,
-                      color: Colors.black.withValues(alpha: 0.04),
+                      color: theme.dividerColor.withValues(alpha: 0.1),
                     ),
                 ],
               ],
@@ -91,7 +99,8 @@ class Tile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return ListTile(
       onTap: onTap,
@@ -106,25 +115,84 @@ class Tile extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: textTheme.titleSmall?.copyWith(
+        style: theme.textTheme.titleSmall?.copyWith(
           fontSize: 14,
           fontWeight: FontWeight.w500,
+          color: isDark ? AppColors.darkTextHeader : AppColors.textHeader,
         ),
       ),
       subtitle: Text(
         subtitle,
-        style: textTheme.labelSmall?.copyWith(
+        style: theme.textTheme.labelSmall?.copyWith(
           fontSize: 11,
-          color: AppColors.textBody,
+          color: isDark ? AppColors.darkTextBody : AppColors.textBody,
         ),
       ),
       trailing:
           trailing ??
           Icon(
             Icons.chevron_right_rounded,
-            color: AppColors.textBody.withValues(alpha: 0.3),
+            color: (isDark ? AppColors.darkTextBody : AppColors.textBody)
+                .withValues(alpha: 0.3),
             size: 20,
           ),
+    );
+  }
+}
+
+class AppearanceGroup extends GetView<SettingsController> {
+  const AppearanceGroup({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    return Section(
+      title: 'APPEARANCE',
+      children: [
+        Obx(
+          () => ListTile(
+            leading: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: Colors.amber.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                controller.isDarkMode
+                    ? Icons.dark_mode_rounded
+                    : Icons.light_mode_rounded,
+                color: Colors.amber,
+                size: 18,
+              ),
+            ),
+            title: Text(
+              'Dark Mode',
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: isDark ? AppColors.darkTextHeader : AppColors.textHeader,
+              ),
+            ),
+            subtitle: Text(
+              controller.isDarkMode
+                  ? 'Deep navy theme active'
+                  : 'Classic light theme active',
+              style: theme.textTheme.labelSmall?.copyWith(
+                fontSize: 11,
+                color: isDark ? AppColors.darkTextBody : AppColors.textBody,
+              ),
+            ),
+            trailing: Switch.adaptive(
+              value: controller.isDarkMode,
+              onChanged: (val) => controller.toggleTheme(val),
+              activeColor: AppColors.primary,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -153,18 +221,19 @@ class OcrLanguageSheet extends GetView<SettingsController> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       padding: EdgeInsets.fromLTRB(
         20,
         16,
         20,
-        16 + Get.context!.mediaQueryPadding.bottom,
+        16 + MediaQuery.of(context).padding.bottom,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -173,7 +242,7 @@ class OcrLanguageSheet extends GetView<SettingsController> {
             width: 36,
             height: 4,
             decoration: BoxDecoration(
-              color: Colors.black12,
+              color: theme.dividerColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -185,7 +254,12 @@ class OcrLanguageSheet extends GetView<SettingsController> {
                     (lang) => ListTile(
                       title: Text(
                         lang.label,
-                        style: textTheme.bodyMedium?.copyWith(fontSize: 14),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontSize: 14,
+                          color: isDark
+                              ? AppColors.darkTextHeader
+                              : AppColors.textHeader,
+                        ),
                       ),
                       trailing: Switch.adaptive(
                         value: lang.isEnabled,
@@ -241,12 +315,13 @@ class TranslationLanguagePicker extends GetView<SettingsController> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
       ),
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).padding.bottom + 16,
@@ -259,7 +334,7 @@ class TranslationLanguagePicker extends GetView<SettingsController> {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: theme.dividerColor.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -272,34 +347,34 @@ class TranslationLanguagePicker extends GetView<SettingsController> {
                   children: [
                     Text(
                       'Translation Language',
-                      style: textTheme.titleLarge?.copyWith(
+                      style: theme.textTheme.titleLarge?.copyWith(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
+                        color: isDark
+                            ? AppColors.darkTextHeader
+                            : AppColors.textHeader,
                       ),
                     ),
                     Text(
                       'Select target language for OCR text',
-                      style: textTheme.bodySmall?.copyWith(
+                      style: theme.textTheme.bodySmall?.copyWith(
                         fontSize: 12,
-                        color: AppColors.textBody,
+                        color: isDark
+                            ? AppColors.darkTextBody
+                            : AppColors.textBody,
                       ),
                     ),
                   ],
                 ),
                 const Spacer(),
-                GestureDetector(
-                  onTap: () => Get.back(),
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.close_rounded,
-                      size: 20,
-                      color: AppColors.textBody,
-                    ),
+                IconButton(
+                  onPressed: () => Get.back(),
+                  icon: Icon(
+                    Icons.close_rounded,
+                    color: isDark ? AppColors.darkTextBody : AppColors.textBody,
+                  ),
+                  style: IconButton.styleFrom(
+                    backgroundColor: theme.dividerColor.withValues(alpha: 0.05),
                   ),
                 ),
               ],
@@ -318,7 +393,7 @@ class TranslationLanguagePicker extends GetView<SettingsController> {
                 padding: const EdgeInsets.only(left: 64),
                 child: Divider(
                   height: 1,
-                  color: Colors.black.withValues(alpha: 0.04),
+                  color: theme.dividerColor.withValues(alpha: 0.05),
                 ),
               ),
               itemBuilder: (context, index) {
@@ -326,23 +401,19 @@ class TranslationLanguagePicker extends GetView<SettingsController> {
                 return Obx(() {
                   final isSelected =
                       controller.targetLanguageCode.value == lang.code;
-
                   return InkWell(
                     onTap: () {
                       controller.setTargetLanguage(lang.code);
                       Get.back();
                     },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
+                    child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,
                       ),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? AppColors.primary.withValues(alpha: 0.05)
-                            : Colors.transparent,
-                      ),
+                      color: isSelected
+                          ? AppColors.primary.withValues(alpha: 0.05)
+                          : null,
                       child: Row(
                         children: [
                           Container(
@@ -351,18 +422,20 @@ class TranslationLanguagePicker extends GetView<SettingsController> {
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? AppColors.primary
-                                  : Colors.black.withValues(alpha: 0.05),
+                                  : theme.dividerColor.withValues(alpha: 0.05),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Center(
                               child: Text(
                                 lang.code.toUpperCase(),
-                                style: textTheme.labelSmall?.copyWith(
+                                style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                   color: isSelected
                                       ? Colors.white
-                                      : AppColors.textBody,
+                                      : (isDark
+                                            ? AppColors.darkTextBody
+                                            : AppColors.textBody),
                                 ),
                               ),
                             ),
@@ -371,14 +444,15 @@ class TranslationLanguagePicker extends GetView<SettingsController> {
                           Expanded(
                             child: Text(
                               lang.label,
-                              style: textTheme.bodyMedium?.copyWith(
-                                fontSize: 15,
-                                fontWeight: isSelected
-                                    ? FontWeight.w600
-                                    : FontWeight.w500,
+                              style: theme.textTheme.bodyMedium?.copyWith(
                                 color: isSelected
                                     ? AppColors.primary
-                                    : AppColors.textHeader,
+                                    : (isDark
+                                          ? AppColors.darkTextHeader
+                                          : AppColors.textHeader),
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.normal,
                               ),
                             ),
                           ),
@@ -386,13 +460,6 @@ class TranslationLanguagePicker extends GetView<SettingsController> {
                             const Icon(
                               Icons.check_circle_rounded,
                               color: AppColors.primary,
-                              size: 24,
-                            )
-                          else
-                            Icon(
-                              Icons.circle_outlined,
-                              color: Colors.black.withValues(alpha: 0.1),
-                              size: 24,
                             ),
                         ],
                       ),
@@ -413,7 +480,8 @@ class PrivacyGroup extends GetView<SettingsController> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Section(
       title: 'PRIVACY',
@@ -426,7 +494,10 @@ class PrivacyGroup extends GetView<SettingsController> {
             ),
             title: Text(
               'Biometric Lock',
-              style: textTheme.bodyMedium?.copyWith(fontSize: 14),
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontSize: 14,
+                color: isDark ? AppColors.darkTextHeader : AppColors.textHeader,
+              ),
             ),
             trailing: Switch.adaptive(
               value: controller.isLockEnabled.value,

@@ -21,9 +21,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return AppBar(
       automaticallyImplyLeading: automaticallyImplyLeading,
-      backgroundColor: Colors.white,
+      // Uses the theme's scaffold background color for a seamless look
+      backgroundColor: theme.scaffoldBackgroundColor,
       elevation: 0,
       surfaceTintColor: Colors.transparent,
       centerTitle: true,
@@ -32,7 +36,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: actions,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
-        child: Divider(height: 1, color: Colors.black.withValues(alpha: 0.06)),
+        child: Divider(
+          height: 1,
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.06)
+              : Colors.black.withValues(alpha: 0.06),
+        ),
       ),
     );
   }
@@ -54,16 +63,15 @@ class AppBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Accessing theme text style
     final textTheme = Theme.of(context).textTheme;
 
     return Container(
       margin: margin ?? const EdgeInsets.only(right: 8),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.09),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: color.withValues(alpha: 0.22), width: 1),
+        border: Border.all(color: color.withValues(alpha: 0.25), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -74,7 +82,7 @@ class AppBadge extends StatelessWidget {
             label,
             style: textTheme.labelSmall?.copyWith(
               color: color,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],
@@ -102,7 +110,12 @@ class IconLabelButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = active ? AppColors.primary : AppColors.textBody;
+    final isDark = theme.brightness == Brightness.dark;
+
+    // Select color based on active state and brightness
+    final Color baseColor = active
+        ? AppColors.primary
+        : (isDark ? AppColors.darkTextBody : AppColors.textBody);
 
     return InkWell(
       onTap: onTap,
@@ -113,20 +126,22 @@ class IconLabelButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           color: active
-              ? AppColors.primary.withValues(alpha: 0.07)
+              ? AppColors.primary.withValues(alpha: 0.1)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: active
-                ? AppColors.primary.withValues(alpha: 0.35)
-                : Colors.black.withValues(alpha: 0.08),
+                ? AppColors.primary.withValues(alpha: 0.4)
+                : (isDark ? Colors.white : Colors.black).withValues(
+                    alpha: 0.08,
+                  ),
             width: 1.2,
           ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 18, color: color),
+            Icon(icon, size: 18, color: baseColor),
             const SizedBox(height: 3),
             Text(
               label,
@@ -134,7 +149,7 @@ class IconLabelButton extends StatelessWidget {
                 fontSize: 8,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.6,
-                color: color,
+                color: baseColor,
               ),
             ),
           ],
@@ -149,22 +164,31 @@ class DotGridBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(child: CustomPaint(painter: _DotGridPainter()));
+    // We pass the primary color to the painter
+    return RepaintBoundary(
+      child: CustomPaint(
+        painter: _DotGridPainter(
+          color: AppColors.primary.withValues(alpha: 0.08),
+        ),
+      ),
+    );
   }
 }
 
 class _DotGridPainter extends CustomPainter {
+  final Color color;
+  _DotGridPainter({required this.color});
+
   @override
   void paint(Canvas canvas, Size size) {
     const spacing = 24.0;
     final paint = Paint()
-      ..color = AppColors.primary.withValues(alpha: 0.07)
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 1.5;
+      ..color = color
+      ..strokeCap = StrokeCap.round;
 
     for (double x = spacing; x < size.width; x += spacing) {
       for (double y = spacing; y < size.height; y += spacing) {
-        canvas.drawCircle(Offset(x, y), 1.2, paint);
+        canvas.drawCircle(Offset(x, y), 1.1, paint);
       }
     }
   }
@@ -180,26 +204,34 @@ class AppCard extends StatelessWidget {
     this.padding,
     this.margin,
     this.borderRadius = 16,
+    this.color, // Added color property for flexibility
   });
 
   final Widget child;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final double borderRadius;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       margin: margin,
       padding: padding ?? const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        // Use provided color, or fallback to theme's card color
+        color: color ?? theme.cardColor,
         borderRadius: BorderRadius.circular(borderRadius),
-        border: Border.all(color: Colors.black.withValues(alpha: 0.04)),
+        border: Border.all(
+          color: (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 10,
+            color: Colors.black.withValues(alpha: isDark ? 0.1 : 0.02),
+            blurRadius: 12,
             offset: const Offset(0, 4),
           ),
         ],
@@ -223,30 +255,28 @@ class AppEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final baseColor = isDark ? AppColors.darkTextBody : AppColors.textBody;
 
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 52,
-            color: AppColors.textBody.withValues(alpha: 0.2),
-          ),
+          Icon(icon, size: 52, color: baseColor.withValues(alpha: 0.2)),
           const SizedBox(height: 12),
           Text(
             title,
-            style: textTheme.titleMedium?.copyWith(
-              color: AppColors.textBody.withValues(alpha: 0.4),
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: baseColor.withValues(alpha: 0.5),
             ),
           ),
           if (subtitle != null) ...[
             const SizedBox(height: 4),
             Text(
               subtitle!,
-              style: textTheme.bodyMedium?.copyWith(
-                color: AppColors.textBody.withValues(alpha: 0.3),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: baseColor.withValues(alpha: 0.4),
               ),
             ),
           ],

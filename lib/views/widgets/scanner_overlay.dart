@@ -48,9 +48,14 @@ class _ScannerOverlayState extends State<ScannerOverlay>
     return Stack(
       children: [
         // 1. Background Mask (Darkens outside the frame)
+        // We keep this dark even in light mode to make the scanner feel immersive
         Positioned.fill(
           child: CustomPaint(
-            painter: HolePainter(rectWidth: rectWidth, rectHeight: rectHeight),
+            painter: HolePainter(
+              rectWidth: rectWidth,
+              rectHeight: rectHeight,
+              maskColor: Colors.black.withValues(alpha: 0.65),
+            ),
           ),
         ),
 
@@ -81,13 +86,15 @@ class _ScannerOverlayState extends State<ScannerOverlay>
             ),
           ),
         ),
+
+        // 3. Frame Border
         Center(
           child: Container(
             width: rectWidth,
             height: rectHeight,
             decoration: BoxDecoration(
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.4),
+                color: Colors.white.withValues(alpha: 0.5),
                 width: 2.0,
               ),
               borderRadius: BorderRadius.circular(30),
@@ -96,6 +103,7 @@ class _ScannerOverlayState extends State<ScannerOverlay>
         ),
 
         // 4. Instructional Text
+        // Explicitly white to ensure legibility over the camera feed
         Positioned(
           top: verticalOffset - 50,
           left: 0,
@@ -107,6 +115,13 @@ class _ScannerOverlayState extends State<ScannerOverlay>
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 0.2,
+                shadows: [
+                  Shadow(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
             ),
           ),
@@ -127,7 +142,7 @@ class ScanningLineIndicator extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.6),
+            color: AppColors.primary.withValues(alpha: 0.8),
             blurRadius: 15,
             spreadRadius: 2,
           ),
@@ -147,12 +162,17 @@ class ScanningLineIndicator extends StatelessWidget {
 class HolePainter extends CustomPainter {
   final double rectWidth;
   final double rectHeight;
+  final Color maskColor;
 
-  HolePainter({required this.rectWidth, required this.rectHeight});
+  HolePainter({
+    required this.rectWidth,
+    required this.rectHeight,
+    required this.maskColor,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.black.withValues(alpha: 0.6);
+    final paint = Paint()..color = maskColor;
 
     RRect roundedRect = RRect.fromLTRBR(
       (size.width - rectWidth) / 2,
@@ -173,5 +193,9 @@ class HolePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant HolePainter oldDelegate) {
+    return oldDelegate.rectWidth != rectWidth ||
+        oldDelegate.rectHeight != rectHeight ||
+        oldDelegate.maskColor != maskColor;
+  }
 }

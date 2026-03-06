@@ -9,32 +9,47 @@ class DeleteScanDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return AlertDialog(
-      backgroundColor: Colors.white,
+      // Uses theme's cardColor or dialogTheme background
+      backgroundColor: theme.cardColor,
       surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: isDark
+            ? BorderSide(color: Colors.white.withValues(alpha: 0.1), width: 1)
+            : BorderSide.none,
+      ),
       title: Text(
         'Delete Scan?',
-        // Using titleMedium from your AppTheme
-        style: textTheme.titleMedium,
+        style: theme.textTheme.titleMedium?.copyWith(
+          color: isDark ? AppColors.darkTextHeader : AppColors.textHeader,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       content: Text(
         '"$title" will be permanently removed.',
-        style: textTheme.bodyMedium?.copyWith(height: 1.5),
+        style: theme.textTheme.bodyMedium?.copyWith(
+          height: 1.5,
+          color: isDark ? AppColors.darkTextBody : AppColors.textBody,
+        ),
       ),
       actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          style: TextButton.styleFrom(foregroundColor: AppColors.textBody),
+          style: TextButton.styleFrom(
+            foregroundColor: isDark
+                ? AppColors.darkTextBody
+                : AppColors.textBody,
+          ),
           child: Text(
             'Cancel',
-            // Using labelLarge for button text
-            style: textTheme.labelLarge?.copyWith(
+            style: theme.textTheme.labelLarge?.copyWith(
               fontWeight: FontWeight.w500,
-              color: AppColors.textBody,
+              color: isDark ? AppColors.darkTextBody : AppColors.textBody,
             ),
           ),
         ),
@@ -42,14 +57,16 @@ class DeleteScanDialog extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(true),
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.error,
+            foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            elevation: 0,
           ),
           child: Text(
             'Delete',
-            style: textTheme.labelLarge?.copyWith(
+            style: theme.textTheme.labelLarge?.copyWith(
               fontWeight: FontWeight.w600,
               color: Colors.white,
             ),
