@@ -1,0 +1,20 @@
+/// Simplified Chinese UI translations for the international scope.
+const zhCn = <String, String>{
+  'FatoraLens': 'FatoraLens',
+  'Home': '首页',
+  'Invoices': '发票',
+  'Tools': '工具',
+  'Account': '账户',
+  'Scan Invoice': '扫描发票',
+  'Scan Document': '扫描文档',
+  'Image to PDF': '图片转 PDF',
+  'Enhance Document': '增强文档',
+  'This Month': '本月',
+  'Expenses': '支出',
+  'VAT': '增值税',
+  'Recent Documents': '最近文档',
+  'No documents yet': '暂无文档',
+  'App language': '应用语言',
+  'Security, Appearance & Language': '安全、外观和语言',
+  'scan_description': '自动拍摄、增强并提取文本',
+};

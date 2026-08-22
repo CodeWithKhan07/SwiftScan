@@ -1,0 +1,235 @@
+{
+  "project_info": {
+    "project_number": "127592425395",
+    "firebase_url": "https://myapp-986be-default-rtdb.firebaseio.com",
+    "project_id": "myapp-986be",
+    "storage_bucket": "myapp-986be.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127592425395:android:f179e5ff1774db7ad88dc6",
+        "android_client_info": {
+          "package_name": "com.example.foodbazar_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127592425395-ejqo8mllaqf4ehel15m7er889u8um9gb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAanjyYo_ZiuVNz7Wq7tqCqrk4u-ZZj5X8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127592425395-ejqo8mllaqf4ehel15m7er889u8um9gb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "127592425395-4q7ulhd72p53vtl8gkdl6g403csiantd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.quizquest"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127592425395:android:32daea7170822e66d88dc6",
+        "android_client_info": {
+          "package_name": "com.example.new_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127592425395-ejqo8mllaqf4ehel15m7er889u8um9gb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAanjyYo_ZiuVNz7Wq7tqCqrk4u-ZZj5X8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127592425395-ejqo8mllaqf4ehel15m7er889u8um9gb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "127592425395-4q7ulhd72p53vtl8gkdl6g403csiantd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.quizquest"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127592425395:android:565ce1e24e7303ffd88dc6",
+        "android_client_info": {
+          "package_name": "com.example.newapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127592425395-ejqo8mllaqf4ehel15m7er889u8um9gb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAanjyYo_ZiuVNz7Wq7tqCqrk4u-ZZj5X8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127592425395-ejqo8mllaqf4ehel15m7er889u8um9gb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "127592425395-4q7ulhd72p53vtl8gkdl6g403csiantd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.quizquest"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127592425395:android:da72949a58797e8bd88dc6",
+        "android_client_info": {
+          "package_name": "com.example.quizquest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127592425395-ejqo8mllaqf4ehel15m7er889u8um9gb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAanjyYo_ZiuVNz7Wq7tqCqrk4u-ZZj5X8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127592425395-ejqo8mllaqf4ehel15m7er889u8um9gb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "127592425395-4q7ulhd72p53vtl8gkdl6g403csiantd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.quizquest"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127592425395:android:14867d07ec3283fdd88dc6",
+        "android_client_info": {
+          "package_name": "com.example.wechat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127592425395-3h7a5ht472f7slb1qvs94vjkvjmmf47l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.wechat",
+            "certificate_hash": "170c912f25f48456dd4862a8d8881adbd050f514"
+          }
+        },
+        {
+          "client_id": "127592425395-ejqo8mllaqf4ehel15m7er889u8um9gb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAanjyYo_ZiuVNz7Wq7tqCqrk4u-ZZj5X8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127592425395-ejqo8mllaqf4ehel15m7er889u8um9gb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "127592425395-4q7ulhd72p53vtl8gkdl6g403csiantd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.quizquest"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127592425395:android:068afcb3df784c9fd88dc6",
+        "android_client_info": {
+          "package_name": "com.techydez.fatoralens"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127592425395-ejqo8mllaqf4ehel15m7er889u8um9gb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAanjyYo_ZiuVNz7Wq7tqCqrk4u-ZZj5X8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127592425395-ejqo8mllaqf4ehel15m7er889u8um9gb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "127592425395-4q7ulhd72p53vtl8gkdl6g403csiantd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.quizquest"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

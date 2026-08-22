@@ -1,0 +1,20 @@
+/// Turkish UI translations for the international scope.
+const trTr = <String, String>{
+  'FatoraLens': 'FatoraLens',
+  'Home': 'Ana Sayfa',
+  'Invoices': 'Faturalar',
+  'Tools': 'Araçlar',
+  'Account': 'Hesap',
+  'Scan Invoice': 'Fatura Tara',
+  'Scan Document': 'Belge Tara',
+  'Image to PDF': 'Görüntüden PDF’ye',
+  'Enhance Document': 'Belgeyi İyileştir',
+  'This Month': 'Bu Ay',
+  'Expenses': 'Giderler',
+  'VAT': 'KDV',
+  'Recent Documents': 'Son Belgeler',
+  'No documents yet': 'Henüz belge yok',
+  'App language': 'Uygulama dili',
+  'Security, Appearance & Language': 'Güvenlik, görünüm ve dil',
+  'scan_description': 'Belgeyi çekin, iyileştirin ve metni otomatik çıkarın',
+};

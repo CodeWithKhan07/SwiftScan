@@ -1,0 +1,20 @@
+/// Italian UI translations for the international scope.
+const itIt = <String, String>{
+  'FatoraLens': 'FatoraLens',
+  'Home': 'Home',
+  'Invoices': 'Fatture',
+  'Tools': 'Strumenti',
+  'Account': 'Account',
+  'Scan Invoice': 'Scansiona fattura',
+  'Scan Document': 'Scansiona documento',
+  'Image to PDF': 'Immagine in PDF',
+  'Enhance Document': 'Migliora documento',
+  'This Month': 'Questo mese',
+  'Expenses': 'Spese',
+  'VAT': 'IVA',
+  'Recent Documents': 'Documenti recenti',
+  'No documents yet': 'Nessun documento',
+  'App language': "Lingua dell’app",
+  'Security, Appearance & Language': 'Sicurezza, aspetto e lingua',
+  'scan_description': 'Acquisisci, migliora ed estrai il testo automaticamente',
+};

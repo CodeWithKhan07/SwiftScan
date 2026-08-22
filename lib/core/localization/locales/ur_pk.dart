@@ -1,0 +1,20 @@
+/// Urdu UI translations for the international scope.
+const urPk = <String, String>{
+  'FatoraLens': 'فاتورا لینس',
+  'Home': 'ہوم',
+  'Invoices': 'انوائسز',
+  'Tools': 'ٹولز',
+  'Account': 'اکاؤنٹ',
+  'Scan Invoice': 'انوائس اسکین کریں',
+  'Scan Document': 'دستاویز اسکین کریں',
+  'Image to PDF': 'تصویر سے PDF',
+  'Enhance Document': 'دستاویز بہتر کریں',
+  'This Month': 'اس ماہ',
+  'Expenses': 'اخراجات',
+  'VAT': 'ٹیکس',
+  'Recent Documents': 'حالیہ دستاویزات',
+  'No documents yet': 'ابھی کوئی دستاویز نہیں',
+  'App language': 'ایپ کی زبان',
+  'Security, Appearance & Language': 'سیکیورٹی، ظاہری شکل اور زبان',
+  'scan_description': 'دستاویز کی تصویر لیں، بہتر کریں اور متن نکالیں',
+};

@@ -1,0 +1,20 @@
+/// Spanish UI translations for the international scope.
+const esEs = <String, String>{
+  'FatoraLens': 'FatoraLens',
+  'Home': 'Inicio',
+  'Invoices': 'Facturas',
+  'Tools': 'Herramientas',
+  'Account': 'Cuenta',
+  'Scan Invoice': 'Escanear factura',
+  'Scan Document': 'Escanear documento',
+  'Image to PDF': 'Imagen a PDF',
+  'Enhance Document': 'Mejorar documento',
+  'This Month': 'Este mes',
+  'Expenses': 'Gastos',
+  'VAT': 'IVA',
+  'Recent Documents': 'Documentos recientes',
+  'No documents yet': 'Aún no hay documentos',
+  'App language': 'Idioma de la aplicación',
+  'Security, Appearance & Language': 'Seguridad, apariencia e idioma',
+  'scan_description': 'Captura, mejora y extrae texto automáticamente',
+};

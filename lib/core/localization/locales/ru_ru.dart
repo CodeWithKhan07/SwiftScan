@@ -1,0 +1,20 @@
+/// Russian UI translations for the international scope.
+const ruRu = <String, String>{
+  'FatoraLens': 'FatoraLens',
+  'Home': 'Главная',
+  'Invoices': 'Счета',
+  'Tools': 'Инструменты',
+  'Account': 'Аккаунт',
+  'Scan Invoice': 'Сканировать счёт',
+  'Scan Document': 'Сканировать документ',
+  'Image to PDF': 'Изображение в PDF',
+  'Enhance Document': 'Улучшить документ',
+  'This Month': 'Этот месяц',
+  'Expenses': 'Расходы',
+  'VAT': 'НДС',
+  'Recent Documents': 'Недавние документы',
+  'No documents yet': 'Документов пока нет',
+  'App language': 'Язык приложения',
+  'Security, Appearance & Language': 'Безопасность, оформление и язык',
+  'scan_description': 'Снимайте, улучшайте и извлекайте текст автоматически',
+};

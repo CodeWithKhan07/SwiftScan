@@ -1,0 +1,20 @@
+/// German UI translations for the international scope.
+const deDe = <String, String>{
+  'FatoraLens': 'FatoraLens',
+  'Home': 'Start',
+  'Invoices': 'Rechnungen',
+  'Tools': 'Werkzeuge',
+  'Account': 'Konto',
+  'Scan Invoice': 'Rechnung scannen',
+  'Scan Document': 'Dokument scannen',
+  'Image to PDF': 'Bild zu PDF',
+  'Enhance Document': 'Dokument verbessern',
+  'This Month': 'Dieser Monat',
+  'Expenses': 'Ausgaben',
+  'VAT': 'MwSt.',
+  'Recent Documents': 'Letzte Dokumente',
+  'No documents yet': 'Noch keine Dokumente',
+  'App language': 'App-Sprache',
+  'Security, Appearance & Language': 'Sicherheit, Darstellung und Sprache',
+  'scan_description': 'Dokument erfassen, verbessern und Text extrahieren',
+};

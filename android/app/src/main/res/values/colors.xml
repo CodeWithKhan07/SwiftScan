@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Startup uses a neutral surface that transitions cleanly into dark UI. -->
+    <color name="app_launch_background">#0F141C</color>
+    <color name="app_launch_icon_background">#203A61</color>
+	<color name="ic_launcher_background">#118CE9</color>
+</resources>

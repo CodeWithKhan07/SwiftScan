@@ -1,83 +1,80 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:swiftscan/core/bindings/app_bindings.dart';
-import 'package:swiftscan/core/resources/theme/app_theme.dart';
-import 'package:swiftscan/core/routes/app_routes.dart';
-import 'package:swiftscan/core/services/app_lock_service.dart';
-import 'package:swiftscan/data/services/hive_service.dart';
-import 'package:swiftscan/views/settings/settings_controller.dart';
 
-void main() async {
+import 'app/di/service_locator.dart';
+import 'app/routes/app_pages.dart';
+import 'app/routes/app_routes.dart';
+import 'core/constants/app_constants.dart';
+import 'core/localization/app_translations.dart';
+import 'core/theme/app_theme.dart';
+import 'presentation/controllers/ads_controller.dart';
+import 'presentation/controllers/app_lock_controller.dart';
+import 'presentation/controllers/app_locale_controller.dart';
+import 'presentation/controllers/app_shell_controller.dart';
+import 'presentation/controllers/app_setup_controller.dart';
+import 'presentation/widgets/app_animations.dart';
+import 'presentation/widgets/lock_overlay.dart';
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await HiveService.init();
-  await GetStorage.init();
-  InitialBinding().dependencies();
-  runApp(const MyApp());
+  await configureDependencies();
+  Get.put<AppShellController>(sl<AppShellController>(), permanent: true);
+  Get.put<AppSetupController>(sl<AppSetupController>(), permanent: true);
+  Get.put<AppLockController>(sl<AppLockController>(), permanent: true);
+  Get.put<AppLocaleController>(sl<AppLocaleController>(), permanent: true);
+  Get.put<AdsController>(sl<AdsController>(), permanent: true);
+  runApp(const FatoraLensApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      _lockOnPause();
-    } else if (state == AppLifecycleState.resumed) {
-      _checkLockOnResume();
-    }
-  }
-
-  void _lockOnPause() {
-    if (!Get.isRegistered<AppLockService>()) return;
-    final lockService = Get.find<AppLockService>();
-    if (lockService.isLockEnabled.value) {
-      lockService.lockApp();
-    }
-  }
-
-  void _checkLockOnResume() {
-    if (!Get.isRegistered<AppLockService>()) return;
-    final lockService = Get.find<AppLockService>();
-    if (lockService.isLockEnabled.value && !lockService.isAuthenticated.value) {
-      final currentRoute = Get.currentRoute;
-      if (currentRoute != RouteNames.authGate &&
-          currentRoute != RouteNames.splash) {
-        Get.toNamed(RouteNames.authGate);
-      }
-    }
-  }
+class FatoraLensApp extends StatelessWidget {
+  const FatoraLensApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final settingsController = Get.find<SettingsController>();
-    return Obx(
-      () => GetMaterialApp(
-        getPages: AppRoutes.appRoutes,
-        initialBinding: InitialBinding(),
-        initialRoute: RouteNames.splash,
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: settingsController.currentTheme.value,
-      ),
+    final shell = Get.find<AppShellController>();
+    final lock = Get.find<AppLockController>();
+    final locale = Get.find<AppLocaleController>();
+    final setup = Get.find<AppSetupController>();
+    return GetMaterialApp(
+      title: AppConstants.appName,
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: shell.isDarkMode.value ? ThemeMode.dark : ThemeMode.light,
+      translations: AppTranslations(),
+      locale: locale.locale,
+      fallbackLocale: const Locale('en', 'US'),
+      supportedLocales: AppTranslations.supportedLocales,
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      // New installations enter setup directly; returning users retain the
+      // synchronized splash-to-home transition.
+      initialRoute: setup.needsOnboarding
+          ? AppRoutes.onboarding
+          : AppRoutes.splash,
+      getPages: AppPages.pages,
+      defaultTransition: Transition.cupertino,
+      transitionDuration: AppMotion.route,
+      builder: (context, child) => Obx(() {
+        final routedContent = child ?? const SizedBox.expand();
+
+        // Pass the Navigator directly through during normal use. The previous
+        // permanent Stack shrink-wrapped routed Scaffolds on the Android frame.
+        final content = lock.locked.value
+            ? Stack(
+                fit: StackFit.expand,
+                children: [
+                  Positioned.fill(child: routedContent),
+                  Positioned.fill(child: LockOverlay(controller: lock)),
+                ],
+              )
+            : routedContent;
+
+        return Directionality(
+          textDirection: locale.isRtl ? TextDirection.rtl : TextDirection.ltr,
+          child: content,
+        );
+      }),
     );
   }
 }

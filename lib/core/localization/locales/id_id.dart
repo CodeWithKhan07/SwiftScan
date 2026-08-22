@@ -1,0 +1,20 @@
+/// Indonesian UI translations for the international scope.
+const idId = <String, String>{
+  'FatoraLens': 'FatoraLens',
+  'Home': 'Beranda',
+  'Invoices': 'Faktur',
+  'Tools': 'Alat',
+  'Account': 'Akun',
+  'Scan Invoice': 'Pindai Faktur',
+  'Scan Document': 'Pindai Dokumen',
+  'Image to PDF': 'Gambar ke PDF',
+  'Enhance Document': 'Tingkatkan Dokumen',
+  'This Month': 'Bulan Ini',
+  'Expenses': 'Pengeluaran',
+  'VAT': 'PPN',
+  'Recent Documents': 'Dokumen Terbaru',
+  'No documents yet': 'Belum ada dokumen',
+  'App language': 'Bahasa aplikasi',
+  'Security, Appearance & Language': 'Keamanan, tampilan, dan bahasa',
+  'scan_description': 'Ambil, tingkatkan, dan ekstrak teks secara otomatis',
+};

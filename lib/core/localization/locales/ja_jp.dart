@@ -1,0 +1,20 @@
+/// Japanese UI translations for the international scope.
+const jaJp = <String, String>{
+  'FatoraLens': 'FatoraLens',
+  'Home': 'ホーム',
+  'Invoices': '請求書',
+  'Tools': 'ツール',
+  'Account': 'アカウント',
+  'Scan Invoice': '請求書をスキャン',
+  'Scan Document': '文書をスキャン',
+  'Image to PDF': '画像を PDF に変換',
+  'Enhance Document': '文書を補正',
+  'This Month': '今月',
+  'Expenses': '支出',
+  'VAT': '消費税',
+  'Recent Documents': '最近の文書',
+  'No documents yet': '文書はまだありません',
+  'App language': 'アプリの言語',
+  'Security, Appearance & Language': 'セキュリティ、外観、言語',
+  'scan_description': '文書を撮影、補正し、テキストを自動抽出します',
+};

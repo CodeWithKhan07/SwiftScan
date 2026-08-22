@@ -1,0 +1,20 @@
+/// Korean UI translations for the international scope.
+const koKr = <String, String>{
+  'FatoraLens': 'FatoraLens',
+  'Home': '홈',
+  'Invoices': '청구서',
+  'Tools': '도구',
+  'Account': '계정',
+  'Scan Invoice': '청구서 스캔',
+  'Scan Document': '문서 스캔',
+  'Image to PDF': '이미지를 PDF로',
+  'Enhance Document': '문서 개선',
+  'This Month': '이번 달',
+  'Expenses': '지출',
+  'VAT': '부가세',
+  'Recent Documents': '최근 문서',
+  'No documents yet': '문서가 없습니다',
+  'App language': '앱 언어',
+  'Security, Appearance & Language': '보안, 화면 및 언어',
+  'scan_description': '문서를 촬영하고 개선하여 텍스트를 자동 추출합니다',
+};

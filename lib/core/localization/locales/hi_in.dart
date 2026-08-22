@@ -1,0 +1,20 @@
+/// Hindi UI translations for the international scope.
+const hiIn = <String, String>{
+  'FatoraLens': 'फतोरा लेंस',
+  'Home': 'होम',
+  'Invoices': 'चालान',
+  'Tools': 'उपकरण',
+  'Account': 'खाता',
+  'Scan Invoice': 'चालान स्कैन करें',
+  'Scan Document': 'दस्तावेज़ स्कैन करें',
+  'Image to PDF': 'छवि से PDF',
+  'Enhance Document': 'दस्तावेज़ सुधारें',
+  'This Month': 'इस महीने',
+  'Expenses': 'खर्च',
+  'VAT': 'कर',
+  'Recent Documents': 'हाल के दस्तावेज़',
+  'No documents yet': 'अभी कोई दस्तावेज़ नहीं',
+  'App language': 'ऐप की भाषा',
+  'Security, Appearance & Language': 'सुरक्षा, रूप और भाषा',
+  'scan_description': 'दस्तावेज़ कैप्चर करें, सुधारें और टेक्स्ट निकालें',
+};

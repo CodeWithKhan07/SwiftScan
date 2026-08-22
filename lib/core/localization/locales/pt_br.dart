@@ -1,0 +1,20 @@
+/// Portuguese UI translations for the international scope.
+const ptBr = <String, String>{
+  'FatoraLens': 'FatoraLens',
+  'Home': 'Início',
+  'Invoices': 'Faturas',
+  'Tools': 'Ferramentas',
+  'Account': 'Conta',
+  'Scan Invoice': 'Digitalizar fatura',
+  'Scan Document': 'Digitalizar documento',
+  'Image to PDF': 'Imagem para PDF',
+  'Enhance Document': 'Melhorar documento',
+  'This Month': 'Este mês',
+  'Expenses': 'Despesas',
+  'VAT': 'IVA',
+  'Recent Documents': 'Documentos recentes',
+  'No documents yet': 'Nenhum documento',
+  'App language': 'Idioma do aplicativo',
+  'Security, Appearance & Language': 'Segurança, aparência e idioma',
+  'scan_description': 'Capture, melhore e extraia texto automaticamente',
+};
